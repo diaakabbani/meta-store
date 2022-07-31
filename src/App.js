@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Card from "./component/card/card";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./widgets/header/header";
+import Footer from "./component/footer/footer";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
+import Cart from "./cart/cart";
+const App = () => {
+  const [product, setProduct] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://dummyjson.com/products")
+      .then((response) => setProduct(response.data.products));
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <Header />
+      <div className="container">
+        {product?.map((product, index) => {
+          return (
+            <Card
+              id={product.id}
+              img={product.images[0]}
+              title={product.title}
+              descrption={product.description}
+              // product={product}
+            />
+          );
+        })}
+      </div>
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   );
-}
-
+};
 export default App;
